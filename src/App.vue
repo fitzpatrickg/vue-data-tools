@@ -1,28 +1,60 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="sidebar-container">
+
+    </div>
+    <main id="main-container" class="conatiner">
+      <WeatherPage/>
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import WeatherPage from './views/WeatherPage.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    WeatherPage,
+  },
+};
 </script>
 
-<style>
+<style lang="scss">
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $greyBlue;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+#sidebar-container {
+  width: 300px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: $strongOrange;
+}
+
+#main-container {
+  margin-left: 315px;
+  margin-right: 15px;
+}
+
+.card {
+  margin: 15px;
+  box-shadow: 0px 0px 6px #888888;
+}
+
+.loading {
+  background-image: url('../public/images/loading-blocks.gif');
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.3;
 }
 </style>
