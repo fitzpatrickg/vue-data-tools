@@ -16,7 +16,7 @@ export default {
   height: 100%;
   width: 100%;
   flex-direction: column;
-  background-color: rgba(221, 212, 212, 0.788);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .loading-animation {

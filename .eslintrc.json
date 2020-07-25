@@ -31,6 +31,11 @@
         "radix": 0,
         "func-names": 0,
         "no-underscore-dangle": 0,
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "import/no-unresolved": [
+            2, 
+            { "caseSensitive": false }
+         ],
+         "no-plusplus": 0
     }
 }

@@ -35,7 +35,7 @@ body {
 
 #sidebar-container {
   width: 300px;
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   background-color: $strongOrange;

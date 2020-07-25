@@ -5,7 +5,6 @@
  */
 
 import Vue from 'vue';
-// eslint-disable-next-line import/no-unresolved
 import LoadingAnimation from './LoadingAnimation.vue';
 
 [

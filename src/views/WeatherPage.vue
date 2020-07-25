@@ -29,11 +29,26 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <LoadingAnimation v-if="!loaded"/>
+      <div v-if="loaded" class="card-body">
+        <h4>Hourly Temperature</h4>
+        <LineChart
+          :chartdata="buildHourlyTempChartData"
+          :options="lineChartOptions"/>
+      </div>
+    </div>
+  </div>
+</div>
+
   </main>
 </template>
 
 <script>
 import weatherUtils from '../mixins/weatherUtils';
+import dateTimeUtils from '../mixins/dateTimeUtils';
 import CurrentWeatherCard from '../components/Weather/CurrentWeatherCard.vue';
 import LineChart from '../components/Charts/LineChart.vue';
 import BarChart from '../components/Charts/BarChart.vue';
@@ -47,7 +62,7 @@ export default {
     BarChart,
   },
 
-  mixins: [weatherUtils],
+  mixins: [weatherUtils, dateTimeUtils],
 
   data() {
     return ({
@@ -65,38 +80,67 @@ export default {
           this.weather = data;
           this.current = data.currently;
           this.loaded = true;
-        }, 1500);
+        }, 300);
       })
       .catch((err) => console.log(err));
     // }, 2000);
   },
 
   methods: {
-    dailyTempDataSet(type) {
-      const dailyData = this.weather.daily.data;
+    dailyTempDataSet(type, timeRange) {
+      const { data } = this.weather[timeRange];
       const dataset = [];
-      dailyData.forEach((day) => {
-        const temp = day[type];
+      data.forEach((d) => {
+        const temp = d[type];
         dataset.push(temp);
       });
       return dataset;
     },
+
+    buildWeeklyChartLabels() {
+      const labels = [];
+      this.weather.daily.data.forEach((d) => {
+        labels.push(dateTimeUtils.getWeekdayFromTimestamp(d.apparentTemperatureMinTime));
+      });
+      return labels;
+    },
+
+    buildHourlyChartLabels() {
+      const labels = [];
+      this.weather.hourly.data.forEach((h) => {
+        labels.push(dateTimeUtils.getHourFromTimeStamp(h.time));
+      });
+      return labels;
+    },
   },
 
   computed: {
+    buildHourlyTempChartData() {
+      return {
+        labels: this.buildHourlyChartLabels(),
+        datasets: [
+          {
+            label: 'Average',
+            borderColor: 'green',
+            data: this.dailyTempDataSet('apparentTemperature', 'hourly'),
+          },
+        ],
+      };
+    },
+
     buildDailyTempChartData() {
       return {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'],
+        labels: this.buildWeeklyChartLabels(),
         datasets: [
           {
             label: 'High',
             borderColor: 'blue',
-            data: this.dailyTempDataSet('apparentTemperatureHigh'),
+            data: this.dailyTempDataSet('apparentTemperatureHigh', 'daily'),
           },
           {
             label: 'Low',
             borderColor: 'red',
-            data: this.dailyTempDataSet('apparentTemperatureLow'),
+            data: this.dailyTempDataSet('apparentTemperatureLow', 'daily'),
           },
         ],
       };
@@ -104,12 +148,12 @@ export default {
 
     buildDailyHumidityChartData() {
       return {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'],
+        labels: this.buildWeeklyChartLabels(),
         datasets: [
           {
             label: 'Humidity',
             borderColor: 'green',
-            data: this.dailyTempDataSet('humidity'),
+            data: this.dailyTempDataSet('humidity', 'daily'),
           },
         ],
       };
