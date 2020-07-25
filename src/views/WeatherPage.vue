@@ -1,49 +1,61 @@
 <template>
-  <main>
-    <CurrentWeatherCard
-      :loaded="loaded"
-      :weather="current" />
-
-<div class="row">
-  <div class="col-6">
-    <div class="card">
-      <LoadingAnimation v-if="!loaded"/>
-      <div v-if="loaded" class="card-body">
-        <h4>Weekly Temperature</h4>
-        <LineChart
-          :chartdata="buildDailyTempChartData"
-          :options="lineChartOptions"/>
+<main>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body form-group">
+          <label for="get-weather-by-location">Select a location:</label>
+          <input id="get-weather-by-location" class="form-control" type="text">
+          <button class="btn btn-primary mt-2">Search</button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-6">
-    <div class="card">
-      <LoadingAnimation v-if="!loaded"/>
-      <div v-if="loaded" class="card-body">
-        <h4>Weekly Humidity</h4>
-        <BarChart
-          :chartdata="buildDailyHumidityChartData"
-          :options="lineChartOptions"/>
+
+  <CurrentWeatherCard
+    :loaded="loaded"
+    :weather="current" />
+
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <LoadingAnimation v-if="!loaded"/>
+        <div v-if="loaded" class="card-body">
+          <h4>Weekly Temperature</h4>
+          <LineChart
+            :chartdata="buildDailyTempChartData"
+            :options="lineChartOptions"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="card">
+        <LoadingAnimation v-if="!loaded"/>
+        <div v-if="loaded" class="card-body">
+          <h4>Weekly Humidity</h4>
+          <BarChart
+            :chartdata="buildDailyHumidityChartData"
+            :options="lineChartOptions"/>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <LoadingAnimation v-if="!loaded"/>
-      <div v-if="loaded" class="card-body">
-        <h4>Hourly Temperature</h4>
-        <LineChart
-          :chartdata="buildHourlyTempChartData"
-          :options="lineChartOptions"/>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <LoadingAnimation v-if="!loaded"/>
+        <div v-if="loaded" class="card-body">
+          <h4>Hourly Temperature</h4>
+          <LineChart
+            :chartdata="buildHourlyTempChartData"
+            :options="lineChartOptions"/>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-  </main>
+</main>
 </template>
 
 <script>
@@ -73,17 +85,23 @@ export default {
   },
 
   mounted() {
-    // setTimeout(() => {
-    weatherUtils.getWeatherData()
-      .then((data) => {
-        setTimeout(() => {
-          this.weather = data;
-          this.current = data.currently;
-          this.loaded = true;
-        }, 300);
-      })
-      .catch((err) => console.log(err));
-    // }, 2000);
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      console.log(lat, lng);
+      weatherUtils.getWeatherData(lat, lng)
+        .then((data) => {
+          setTimeout(() => {
+            this.weather = data;
+            this.current = data.currently;
+            this.loaded = true;
+          }, 300);
+        })
+        .catch((err) => console.log(err));
+    },
+    () => {
+      console.log('no geolocation');
+    });
   },
 
   methods: {
