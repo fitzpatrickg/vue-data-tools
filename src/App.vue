@@ -51,10 +51,4 @@ body {
   box-shadow: 0px 0px 6px #888888;
 }
 
-.loading {
-  background-image: url('../public/images/loading-blocks.gif');
-  background-repeat: no-repeat;
-  background-position: center center;
-  opacity: 0.3;
-}
 </style>

@@ -20,7 +20,7 @@ export default {
 }
 
 .loading-animation {
-  background-image: url('../../public/images/loading-blocks.gif');
+  background-image: url('../../assets/img/loading-animation.gif');
   background-repeat: no-repeat;
   background-position: center center;
   height: 200px;

@@ -1,6 +1,7 @@
 <template>
 <div class="card">
-        <div class="card-body">
+        <LoadingAnimation v-if="!loaded"/>
+        <div v-if="loaded" class="card-body">
         <h1>Current Weather</h1>
         <span>{{ weather.summary }}</span>
           <div class="row mt-4">
@@ -43,10 +44,11 @@
 </template>
 
 <script>
+
 export default {
   name: 'CurrentWeatherCard',
 
-  props: ['weather'],
+  props: ['weather', 'loaded'],
 };
 </script>
 

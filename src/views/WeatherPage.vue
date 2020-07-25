@@ -1,27 +1,42 @@
 <template>
   <main>
     <CurrentWeatherCard
-      v-if="loaded"
+      :loaded="loaded"
       :weather="current" />
 
+<div class="row">
+  <div class="col-6">
     <div class="card">
       <LoadingAnimation v-if="!loaded"/>
-      <div class="card-body">
-        <h4>Temp Highs and Lows for the week</h4>
+      <div v-if="loaded" class="card-body">
+        <h4>Weekly Temperature</h4>
         <LineChart
-          v-if="loaded"
-          :chartdata="buildDailyChartData"
+          :chartdata="buildDailyTempChartData"
           :options="lineChartOptions"/>
       </div>
     </div>
+  </div>
+  <div class="col-6">
+    <div class="card">
+      <LoadingAnimation v-if="!loaded"/>
+      <div v-if="loaded" class="card-body">
+        <h4>Weekly Humidity</h4>
+        <BarChart
+          :chartdata="buildDailyHumidityChartData"
+          :options="lineChartOptions"/>
+      </div>
+    </div>
+  </div>
+</div>
+
   </main>
 </template>
 
 <script>
 import weatherUtils from '../mixins/weatherUtils';
-import LoadingAnimation from '../components/LoadingAnimation.vue';
 import CurrentWeatherCard from '../components/Weather/CurrentWeatherCard.vue';
 import LineChart from '../components/Charts/LineChart.vue';
+import BarChart from '../components/Charts/BarChart.vue';
 
 export default {
   name: 'WeatherPage',
@@ -29,7 +44,7 @@ export default {
   components: {
     CurrentWeatherCard,
     LineChart,
-    LoadingAnimation,
+    BarChart,
   },
 
   mixins: [weatherUtils],
@@ -46,48 +61,55 @@ export default {
     // setTimeout(() => {
     weatherUtils.getWeatherData()
       .then((data) => {
-        this.weather = data;
-        this.current = data.currently;
-        this.loaded = true;
+        setTimeout(() => {
+          this.weather = data;
+          this.current = data.currently;
+          this.loaded = true;
+        }, 1500);
       })
       .catch((err) => console.log(err));
     // }, 2000);
   },
 
+  methods: {
+    dailyTempDataSet(type) {
+      const dailyData = this.weather.daily.data;
+      const dataset = [];
+      dailyData.forEach((day) => {
+        const temp = day[type];
+        dataset.push(temp);
+      });
+      return dataset;
+    },
+  },
+
   computed: {
-    dailyHighTempDataSet() {
-      const dailyData = this.weather.daily.data;
-      const dataset = [];
-      dailyData.forEach((day) => {
-        const dailyHigh = day.apparentTemperatureHigh;
-        dataset.push(dailyHigh);
-      });
-      return dataset;
-    },
-
-    dailyLowTempDataSet() {
-      const dailyData = this.weather.daily.data;
-      const dataset = [];
-      dailyData.forEach((day) => {
-        const dailyHigh = day.apparentTemperatureLow;
-        dataset.push(dailyHigh);
-      });
-      return dataset;
-    },
-
-    buildDailyChartData() {
+    buildDailyTempChartData() {
       return {
         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'],
         datasets: [
           {
             label: 'High',
             borderColor: 'blue',
-            data: this.dailyHighTempDataSet,
+            data: this.dailyTempDataSet('apparentTemperatureHigh'),
           },
           {
             label: 'Low',
             borderColor: 'red',
-            data: this.dailyLowTempDataSet,
+            data: this.dailyTempDataSet('apparentTemperatureLow'),
+          },
+        ],
+      };
+    },
+
+    buildDailyHumidityChartData() {
+      return {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon'],
+        datasets: [
+          {
+            label: 'Humidity',
+            borderColor: 'green',
+            data: this.dailyTempDataSet('humidity'),
           },
         ],
       };
