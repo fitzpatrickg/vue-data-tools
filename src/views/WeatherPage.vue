@@ -7,6 +7,7 @@
           <label for="get-weather-by-location">Select a location:</label>
           <input id="get-weather-by-location" class="form-control" type="text">
           <button class="btn btn-primary mt-2">Search</button>
+          <button class="btn btn-success mt-2 ml-4" @click="showSuccessModal = true">Show Modal</button>
         </div>
       </div>
     </div>
@@ -55,6 +56,11 @@
     </div>
   </div>
 
+  <!-- @close listens for event on close button & modal-wrapper -->
+  <SuccessModal
+    v-if="showSuccessModal"
+    @close="showSuccessModal = false"/>
+
 </main>
 </template>
 
@@ -64,6 +70,7 @@ import dateTimeUtils from '../mixins/dateTimeUtils';
 import CurrentWeatherCard from '../components/Weather/CurrentWeatherCard.vue';
 import LineChart from '../components/Charts/LineChart.vue';
 import BarChart from '../components/Charts/BarChart.vue';
+import SuccessModal from '../components/Modals/SuccessModal.vue';
 
 export default {
   name: 'WeatherPage',
@@ -72,6 +79,7 @@ export default {
     CurrentWeatherCard,
     LineChart,
     BarChart,
+    SuccessModal,
   },
 
   mixins: [weatherUtils, dateTimeUtils],
@@ -81,6 +89,7 @@ export default {
       weather: null,
       current: null,
       loaded: false,
+      showSuccessModal: false,
     });
   },
 
@@ -88,14 +97,11 @@ export default {
     navigator.geolocation.getCurrentPosition((position) => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-      console.log(lat, lng);
       weatherUtils.getWeatherData(lat, lng)
         .then((data) => {
-          setTimeout(() => {
-            this.weather = data;
-            this.current = data.currently;
-            this.loaded = true;
-          }, 300);
+          this.weather = data;
+          this.current = data.currently;
+          this.loaded = true;
         })
         .catch((err) => console.log(err));
     },
@@ -129,6 +135,10 @@ export default {
         labels.push(dateTimeUtils.getHourFromTimeStamp(h.time));
       });
       return labels;
+    },
+
+    closeEvent() {
+      this.showSuccessModal = false;
     },
   },
 
