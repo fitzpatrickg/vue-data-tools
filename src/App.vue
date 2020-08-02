@@ -1,21 +1,20 @@
 <template>
   <div id="app">
-    <div id="sidebar-container">
-
-    </div>
+    <Sidebar/>
     <main id="main-container" class="conatiner">
-      <WeatherPage/>
+      <router-view/>
     </main>
   </div>
 </template>
 
 <script>
-import WeatherPage from './views/WeatherPage.vue';
+import Sidebar from './views/layout/Sidebar.vue';
 
 export default {
   name: 'App',
+
   components: {
-    WeatherPage,
+    Sidebar,
   },
 };
 </script>

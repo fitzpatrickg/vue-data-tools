@@ -65,10 +65,10 @@
 </template>
 
 <script>
+import LineChart from '../components/Charts/LineChart.vue';
 import weatherUtils from '../mixins/weatherUtils';
 import dateTimeUtils from '../mixins/dateTimeUtils';
 import CurrentWeatherCard from '../components/Weather/CurrentWeatherCard.vue';
-import LineChart from '../components/Charts/LineChart.vue';
 import BarChart from '../components/Charts/BarChart.vue';
 import SuccessModal from '../components/Modals/SuccessModal.vue';
 
