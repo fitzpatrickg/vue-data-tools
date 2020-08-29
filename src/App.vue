@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <HamburgerSideBar/>
     <Sidebar/>
     <main id="main-container" class="conatiner">
       <router-view/>
@@ -8,6 +9,7 @@
 </template>
 
 <script>
+import HamburgerSideBar from './views/layout/HamburgerSideBar.vue';
 import Sidebar from './views/layout/Sidebar.vue';
 
 export default {
@@ -15,6 +17,7 @@ export default {
 
   components: {
     Sidebar,
+    HamburgerSideBar,
   },
 };
 </script>
@@ -37,11 +40,22 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
+  left: 35px;
   background-color: $strongOrange;
 }
 
+  #hamburger-sidebar {
+    width: 35px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 99;
+    background-color: $darkBlue;
+  }
+
 #main-container {
-  margin-left: 315px;
+  margin-left: 345px;
   margin-right: 15px;
 }
 
