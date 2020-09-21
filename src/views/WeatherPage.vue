@@ -102,6 +102,7 @@ export default {
           this.weather = data;
           this.current = data.currently;
           this.loaded = true;
+          this.$store.commit('updateWeather', data);
         })
         .catch((err) => console.log(err));
     },
