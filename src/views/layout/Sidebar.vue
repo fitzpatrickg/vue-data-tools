@@ -21,19 +21,12 @@ export default {
 
   data() {
     return {
-      routes: [
-        {
-          name: 'Home',
-          link: '/',
-          icon: 'fas fa-home',
-        },
-        {
-          name: 'Weather',
-          link: '/weather-graphs',
-          icon: 'fas fa-cloud',
-        },
-      ],
+      routes: null,
     };
+  },
+
+  created() {
+    this.routes = this.$store.getters.getRoutesForNav;
   },
 };
 </script>
