@@ -1,6 +1,6 @@
 <template>
   <div id="hamburger-sidebar" class="d-flex justify-content-center pt-2">
-    <SlideoutMenu/>
+    <SlideoutMenu />
     <a href="#" @click="showPanel">
       <i class="fas fa-bars"></i>
     </a>
@@ -24,11 +24,7 @@ export default {
         width: '400px',
         openOn: 'left',
         props: {
-          menu: [
-            'Web',
-            'Mobile',
-            'Central',
-          ],
+          menu: 'web',
         },
       });
 

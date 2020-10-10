@@ -18,9 +18,22 @@
         culpa qui officia deserunt mollit anim id est laborum.</p>
     </div>
     <div class="card-footer d-flex justify-content-between">
-      <span class="footer-option"><a href="#">First Option</a></span>
-      <span class="footer-option"><a href="#">Second Option</a></span>
-      <span class="footer-option"><a href="#">Third Option</a></span>
+      <span class="footer-option">
+        <a
+          @click="updateSelection('web')"
+          class="btn btn-primary text-white"
+          href="#">
+            Web
+          </a>
+      </span>
+      <span class="footer-option text-light">
+        <a
+          @click="updateSelection('mobile')"
+          class="btn btn-primary text-white"
+          href="#">
+          Mobile
+        </a>
+      </span>
     </div>
   </div>
 </template>
@@ -28,6 +41,13 @@
 <script>
 export default {
   name: 'HomePage',
+
+  methods: {
+    updateSelection(selection) {
+      this.$store.commit('updateSelectedSection', selection);
+      console.log(this.$store.state.selection);
+    },
+  },
 };
 </script>
 

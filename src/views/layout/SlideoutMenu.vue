@@ -2,8 +2,11 @@
 <slideout-panel>
   <div class="slideout-menu">
     <ul>
-      <li v-bind:key="i" v-for="(item, i) in menu">
-        <a href="#">{{ item }}</a>
+      <li>
+        <a href="#">Web</a>
+      </li>
+      <li>
+        <a href="#">Mobile</a>
       </li>
     </ul>
   </div>
